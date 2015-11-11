@@ -1,8 +1,5 @@
 ﻿namespace TexasHoldem.AI.SmokinAcesPlayer
 {
-    using System;
-    using System.ComponentModel;
-
     /// <summary>
     ///     this class includes the chipStack of the individual players and actions they can make
     ///     in poker, a very important class
@@ -12,24 +9,27 @@
         protected int amountContributed;
         protected int amountInPot;
         protected int chipStack;
-        protected bool folded;
         protected int initialStack;
-        public bool isbusted;
-        protected string message;
         protected Hand myHand = new Hand();
-        protected string name;
-        protected string simplifiedMessage;
+
+        //protected string name;
+        //protected string simplifiedMessage;
+        //protected string message;
+        //protected bool folded;
+        //public bool isbusted;
+
         //contruct player name and chipstack
         public Player()
         {
-            this.name = "You";
+            //this.name = "You";
             this.ChipStack = 10000;
             this.amountInPot = 0;
+
             this.initialStack = this.ChipStack;
-            this.folded = false;
-            this.message = "No decision has been made";
-            this.simplifiedMessage = "";
-            this.isbusted = false;
+            //this.folded = false;
+            //this.message = "No decision has been made";
+            //this.simplifiedMessage = "";
+            //this.isbusted = false;
         }
 
         public Player(int buyInAmount)
@@ -37,40 +37,40 @@
             this.ChipStack = buyInAmount;
             this.initialStack = this.ChipStack;
             this.amountInPot = 0;
-            this.folded = false;
-            this.message = "No decision has been made";
-            this.simplifiedMessage = "";
-            this.isbusted = false;
+            //this.folded = false;
+            //this.message = "No decision has been made";
+            //this.simplifiedMessage = "";
+            //this.isbusted = false;
         }
 
-        public Player(string name, int buyInAmount)
-        {
-            if (name == "")
-            {
-                name = "You";
-            }
-            this.name = name;
-            this.ChipStack = buyInAmount;
-            this.initialStack = this.ChipStack;
-            this.amountInPot = 0;
-            this.folded = false;
-            this.message = "No decision has been made";
-            this.simplifiedMessage = "";
-            this.isbusted = false;
-        }
+        //public Player(string name, int buyInAmount)
+        //{
+        //    if (name == "")
+        //    {
+        //        name = "You";
+        //    }
+        //    this.name = name;
+        //    this.ChipStack = buyInAmount;
+        //    this.initialStack = this.ChipStack;
+        //    this.amountInPot = 0;
+        //    this.folded = false;
+        //    this.message = "No decision has been made";
+        //    this.simplifiedMessage = "";
+        //    this.isbusted = false;
+        //}
 
         //various propeties
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-            set
-            {
-                this.name = value;
-            }
-        }
+        //public string Name
+        //{
+        //    get
+        //    {
+        //        return this.name;
+        //    }
+        //    set
+        //    {
+        //        this.name = value;
+        //    }
+        //}
 
         public int ChipStack
         {
@@ -100,61 +100,61 @@
             }
         }
 
-        public string Message
-        {
-            get
-            {
-                return this.message;
-            }
-            set
-            {
-                this.message = value;
-            }
-        }
+        //public string Message
+        //{
+        //    get
+        //    {
+        //        return this.message;
+        //    }
+        //    set
+        //    {
+        //        this.message = value;
+        //    }
+        //}
 
-        public string SimplifiedMessage
-        {
-            get
-            {
-                return this.simplifiedMessage;
-            }
-            set
-            {
-                this.simplifiedMessage = value;
-            }
-        }
+        //public string SimplifiedMessage
+        //{
+        //    get
+        //    {
+        //        return this.simplifiedMessage;
+        //    }
+        //    set
+        //    {
+        //        this.simplifiedMessage = value;
+        //    }
+        //}
 
-        public int InitialStack
-        {
-            get
-            {
-                return this.initialStack;
-            }
-            set
-            {
-                if (value < 0)
-                {
-                    value = 0;
-                }
-                this.initialStack = value;
-            }
-        }
+        //public int InitialStack
+        //{
+        //    get
+        //    {
+        //        return this.initialStack;
+        //    }
+        //    set
+        //    {
+        //        if (value < 0)
+        //        {
+        //            value = 0;
+        //        }
+        //        this.initialStack = value;
+        //    }
+        //}
 
-        public int AmountInPot
-        {
-            get
-            {
-                return this.amountInPot;
-            }
-            set
-            {
-                if (value < 0)
-                {
-                    value = 0;
-                }
-                this.amountInPot = value;
-            }
-        }
+        //public int AmountInPot
+        //{
+        //    get
+        //    {
+        //        return this.amountInPot;
+        //    }
+        //    set
+        //    {
+        //        if (value < 0)
+        //        {
+        //            value = 0;
+        //        }
+        //        this.amountInPot = value;
+        //    }
+        //}
 
         public int getAmountToCall(Pot mainPot)
         {
@@ -172,10 +172,10 @@
             this.myHand += hand;
         }
 
-        public void AddToHand(Card card)
-        {
-            this.myHand.Add(card);
-        }
+        //public void AddToHand(Card card)
+        //{
+        //    this.myHand.Add(card);
+        //}
 
         //pay the small and big blinds
         public void PaySmallBlind(int amount, Pot mainPot)
@@ -191,8 +191,8 @@
             mainPot.AddPlayer(this);
             mainPot.setMaximumAmount(this.amountInPot);
             mainPot.MinimumRaise = amount;
-            this.Message = this.Name + " pays the small blind";
-            this.SimplifiedMessage = "SMALL BLIND " + amount;
+            //this.Message = this.Name + " pays the small blind";
+            //this.SimplifiedMessage = "SMALL BLIND " + amount;
         }
 
         public void PayBigBlind(int amount, Pot mainPot)
@@ -202,36 +202,36 @@
                 this.AllIn(mainPot);
                 return;
             }
-            this.Message = "Pay blind of " + amount.ToString("c0");
+            //this.Message = "Pay blind of " + amount.ToString("c0");
             this.ChipStack -= amount;
             this.amountInPot += amount;
             mainPot.Add(amount);
             mainPot.AddPlayer(this);
             mainPot.setMaximumAmount(this.amountInPot);
             mainPot.MinimumRaise = amount;
-            this.Message = this.Name + " pays the big blind";
-            this.SimplifiedMessage = "BIG BLIND " + amount;
+            //this.Message = this.Name + " pays the big blind";
+            //this.SimplifiedMessage = "BIG BLIND " + amount;
         }
 
         //leave the round
         public void Fold(Pot mainPot)
         {
-            this.folded = true;
-            mainPot.getPlayersInPot().Remove(this);
-            this.Message = "Fold";
-            this.SimplifiedMessage = "FOLDED";
+            //this.folded = true;
+            //mainPot.getPlayersInPot().Remove(this);
+            //this.Message = "Fold";
+            //this.SimplifiedMessage = "FOLDED";
         }
 
-        public bool IsFolded()
-        {
-            return this.folded;
-        }
+        //public bool IsFolded()
+        //{
+        //    return this.folded;
+        //}
 
         //don't bet
         public void Check(Pot mainPot)
         {
-            this.Message = "Check";
-            this.SimplifiedMessage = "CHECK";
+            //this.Message = "Check";
+            //this.SimplifiedMessage = "CHECK";
         }
 
         //bet enough to stay in the round
@@ -247,8 +247,8 @@
             this.amountInPot += amount;
             mainPot.Add(amount);
             mainPot.AddPlayer(this);
-            this.Message = "Call " + amount.ToString("c0");
-            this.SimplifiedMessage = "CALL " + amount;
+            //this.Message = "Call " + amount.ToString("c0");
+            //this.SimplifiedMessage = "CALL " + amount;
         }
 
         //call and bet additional amount of money
@@ -266,8 +266,8 @@
             mainPot.setMaximumAmount(this.amountInPot);
             mainPot.AddPlayer(this);
             mainPot.MinimumRaise = raise;
-            this.Message = "Call " + (amount - raise).ToString("c0") + " and raise " + raise.ToString("c0");
-            this.SimplifiedMessage = "RAISE " + (amount - raise);
+            //this.Message = "Call " + (amount - raise).ToString("c0") + " and raise " + raise.ToString("c0");
+            //this.SimplifiedMessage = "RAISE " + (amount - raise);
         }
 
 
@@ -284,8 +284,8 @@
             mainPot.Add(bet);
             mainPot.setMaximumAmount(this.amountInPot);
             mainPot.MinimumRaise = bet;
-            this.Message = "Bet " + bet.ToString("c0");
-            this.SimplifiedMessage = "BET " + bet;
+            //this.Message = "Bet " + bet.ToString("c0");
+            //this.SimplifiedMessage = "BET " + bet;
         }
 
         //all in, bet remaining chipstack
@@ -313,8 +313,8 @@
             {
                 mainPot.setMaximumAmount(this.amountInPot);
             }
-            this.Message = "I'm All-In";
-            this.SimplifiedMessage = "ALL IN";
+            //this.Message = "I'm All-In";
+            //this.SimplifiedMessage = "ALL IN";
         }
 
         //public void AllIn(Pot mainPot, int index)
@@ -341,8 +341,8 @@
         //    {
         //        mainPot.setMaximumAmount(this.amountInPot);
         //    }
-        //    this.Message = "I'm All-In";
-        //    this.SimplifiedMessage = "ALL IN";
+        //    //this.Message = "I'm All-In";
+        //    //this.SimplifiedMessage = "ALL IN";
         //    mainPot.AgressorIndex = index;
         //}
 

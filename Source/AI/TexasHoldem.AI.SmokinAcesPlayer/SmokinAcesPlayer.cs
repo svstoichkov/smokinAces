@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TexasHoldem.AI.SmokinAcesPlayer
+﻿namespace TexasHoldem.AI.SmokinAcesPlayer
 {
-    public class Class1
+    using System;
+
+    using Logic.Players;
+
+    public class SmokinAcesPlayer : BasePlayer
     {
+        public override string Name { get; } = "SmokinAcesPlayer_" + Guid.NewGuid();
+
+        public override PlayerAction GetTurn(GetTurnContext context)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

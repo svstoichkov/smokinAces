@@ -82,11 +82,11 @@
         //various propeties
         public double HandValue { get; private set; }
 
-        public double PotOdds { get; private set; }
+        //public double PotOdds { get; private set; }
 
-        public double RateOfReturn { get; private set; }
+        //public double RateOfReturn { get; private set; }
 
-        public string Information { get; }
+        //public string Information { get; }
 
         //make a decision about what to do
         public void MakeADecision(Pot mainPot, int index)

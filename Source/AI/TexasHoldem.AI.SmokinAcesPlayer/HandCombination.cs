@@ -7,51 +7,51 @@
     /// </summary>
     public static class HandCombination
     {
-        public static Hand getBestHand(Hand hand)
-        {
-            if (hand.Count() < 5)
-            {
-                hand.Clear();
-                return hand;
-            }
-            if (isRoyalFlush(hand))
-            {
-                return getRoyalFlush(hand);
-            }
-            if (isStraightFlush(hand))
-            {
-                return getStraightFlush(hand);
-            }
-            if (isFourOfAKind(hand))
-            {
-                return getFourOfAKind(hand);
-            }
-            if (isFullHouse(hand))
-            {
-                return getFullHouse(hand);
-            }
-            if (isFlush(hand))
-            {
-                return getFlush(hand);
-            }
-            if (isStraight(hand))
-            {
-                return getStraight(hand);
-            }
-            if (isThreeOfAKind(hand))
-            {
-                return getThreeOfAKind(hand);
-            }
-            if (isTwoPair(hand))
-            {
-                return getTwoPair(hand);
-            }
-            if (isOnePair(hand))
-            {
-                return getOnePair(hand);
-            }
-            return getHighCard(hand);
-        }
+        //public static Hand getBestHand(Hand hand)
+        //{
+        //    if (hand.Count() < 5)
+        //    {
+        //        hand.Clear();
+        //        return hand;
+        //    }
+        //    if (isRoyalFlush(hand))
+        //    {
+        //        return getRoyalFlush(hand);
+        //    }
+        //    if (isStraightFlush(hand))
+        //    {
+        //        return getStraightFlush(hand);
+        //    }
+        //    if (isFourOfAKind(hand))
+        //    {
+        //        return getFourOfAKind(hand);
+        //    }
+        //    if (isFullHouse(hand))
+        //    {
+        //        return getFullHouse(hand);
+        //    }
+        //    if (isFlush(hand))
+        //    {
+        //        return getFlush(hand);
+        //    }
+        //    if (isStraight(hand))
+        //    {
+        //        return getStraight(hand);
+        //    }
+        //    if (isThreeOfAKind(hand))
+        //    {
+        //        return getThreeOfAKind(hand);
+        //    }
+        //    if (isTwoPair(hand))
+        //    {
+        //        return getTwoPair(hand);
+        //    }
+        //    if (isOnePair(hand))
+        //    {
+        //        return getOnePair(hand);
+        //    }
+        //    return getHighCard(hand);
+        //}
 
         //get best class without running isRoyalFlush, since straightflush covers the royal flush
         public static Hand getBestHandEfficiently(Hand hand)
@@ -128,18 +128,18 @@
         }
 
         //get royal flush using recursion
-        public static Hand getRoyalFlush(Hand hand)
-        {
-            hand.sortByRank();
-            Hand straightflush = new Hand(getStraightFlush(hand));
-            straightflush.setValue(10);
-            if (straightflush.getCard(0).getRank() == 14)
-            {
-                return straightflush;
-            }
-            straightflush.Clear();
-            return straightflush;
-        }
+        //public static Hand getRoyalFlush(Hand hand)
+        //{
+        //    hand.sortByRank();
+        //    Hand straightflush = new Hand(getStraightFlush(hand));
+        //    straightflush.setValue(10);
+        //    if (straightflush.getCard(0).getRank() == 14)
+        //    {
+        //        return straightflush;
+        //    }
+        //    straightflush.Clear();
+        //    return straightflush;
+        //}
 
         //use recursion to get rid of pairs, then evaluate straight flush
         public static bool isStraightFlush(Hand hand)
@@ -697,10 +697,10 @@
             return getKickers(hand, onepair);
         }
 
-        public static bool isHighCard(Hand hand)
-        {
-            return true;
-        }
+        //public static bool isHighCard(Hand hand)
+        //{
+        //    return true;
+        //}
 
         //get highest cards after sorting
         public static Hand getHighCard(Hand hand)
