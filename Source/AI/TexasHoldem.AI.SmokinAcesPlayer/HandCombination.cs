@@ -1,152 +1,73 @@
-﻿namespace TexasHoldem.AI.SmokinAcesPlayer
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Holdem
 {
+    using TexasHoldem.AI.SmokinAcesPlayer;
+    using TexasHoldem.Logic.Cards;
+
     /// <summary>
-    ///     the most enjoyable class to program, evaluate the best 5 cards out of 7 cards
-    ///     also determines information needed to compare hands
-    ///     all hands are sorted
+    /// the most enjoyable class to program, evaluate the best 5 cards out of 7 cards
+    /// also determines information needed to compare hands
+    /// all hands are sorted
     /// </summary>
     public static class HandCombination
     {
-        //public static Hand getBestHand(Hand hand)
-        //{
-        //    if (hand.Count() < 5)
-        //    {
-        //        hand.Clear();
-        //        return hand;
-        //    }
-        //    if (isRoyalFlush(hand))
-        //    {
-        //        return getRoyalFlush(hand);
-        //    }
-        //    if (isStraightFlush(hand))
-        //    {
-        //        return getStraightFlush(hand);
-        //    }
-        //    if (isFourOfAKind(hand))
-        //    {
-        //        return getFourOfAKind(hand);
-        //    }
-        //    if (isFullHouse(hand))
-        //    {
-        //        return getFullHouse(hand);
-        //    }
-        //    if (isFlush(hand))
-        //    {
-        //        return getFlush(hand);
-        //    }
-        //    if (isStraight(hand))
-        //    {
-        //        return getStraight(hand);
-        //    }
-        //    if (isThreeOfAKind(hand))
-        //    {
-        //        return getThreeOfAKind(hand);
-        //    }
-        //    if (isTwoPair(hand))
-        //    {
-        //        return getTwoPair(hand);
-        //    }
-        //    if (isOnePair(hand))
-        //    {
-        //        return getOnePair(hand);
-        //    }
-        //    return getHighCard(hand);
-        //}
-
         //get best class without running isRoyalFlush, since straightflush covers the royal flush
-        public static Hand getBestHandEfficiently(Hand hand)
+        public static HandType getBestHandEfficiently(List<Card> hand)
         {
-            if (hand.Count() < 5)
-            {
-                hand.Clear();
-                return hand;
-            }
             if (isStraightFlush(hand))
-            {
-                return getStraightFlush(hand);
-            }
+                return HandType.Flush;
             if (isFourOfAKind(hand))
-            {
-                return getFourOfAKind(hand);
-            }
+                return HandType.FourOfAKind;
             if (isFullHouse(hand))
-            {
-                return getFullHouse(hand);
-            }
+                return HandType.FullHouse;
             if (isFlush(hand))
-            {
-                return getFlush(hand);
-            }
+                return HandType.Flush;
             if (isStraight(hand))
-            {
-                return getStraight(hand);
-            }
+                return HandType.Straight;
             if (isThreeOfAKind(hand))
-            {
-                return getThreeOfAKind(hand);
-            }
+                return HandType.ThreeOfAKind;
             if (isTwoPair(hand))
-            {
-                return getTwoPair(hand);
-            }
+                return HandType.TwoPair;
             if (isOnePair(hand))
-            {
-                return getOnePair(hand);
-            }
-            return getHighCard(hand);
-        }
+                return HandType.OnePair;
 
+            return HandType.HighCard;
+        }
         //look for royal flush, removing pair using recursion
         public static bool isRoyalFlush(Hand hand)
         {
             hand.sortByRank();
             Hand simplifiedhand1, simplifiedhand2; //to be set the same as hand - cards are removed from this hand to evaluate straights separately without the interference of pairs or three-of-a-kind
-            for (var i = 0; i <= hand.Count() - 2; i++)
+            for (int i = 0; i <= hand.Count() - 2; i++)
             {
-                if (hand[i] == hand[i + 1])
+                if (hand[i] == hand[i+1])
                 {
                     simplifiedhand1 = new Hand(hand);
                     simplifiedhand1.Remove(i);
                     simplifiedhand2 = new Hand(hand);
                     simplifiedhand2.Remove(i + 1);
-                    if (isRoyalFlush(simplifiedhand1))
-                    {
+                    if (HandCombination.isRoyalFlush(simplifiedhand1))
                         return true;
-                    }
-                    if (isRoyalFlush(simplifiedhand2))
-                    {
+                    if (HandCombination.isRoyalFlush(simplifiedhand2))
                         return true;
-                    }
                 }
             }
             int currentsuit = hand.getCard(0).getSuit();
             if (hand.getCard(0).getRank() == 14 && hand.getCard(1).getRank() == 13 && hand.getCard(2).getRank() == 12 && hand.getCard(3).getRank() == 11 && hand.getCard(4).getRank() == 10 && hand.getCard(1).getSuit() == currentsuit && hand.getCard(2).getSuit() == currentsuit && hand.getCard(3).getSuit() == currentsuit && hand.getCard(4).getSuit() == currentsuit)
-            {
                 return true;
-            }
-            return false;
+            else
+                return false;
         }
-
-        //get royal flush using recursion
-        //public static Hand getRoyalFlush(Hand hand)
-        //{
-        //    hand.sortByRank();
-        //    Hand straightflush = new Hand(getStraightFlush(hand));
-        //    straightflush.setValue(10);
-        //    if (straightflush.getCard(0).getRank() == 14)
-        //    {
-        //        return straightflush;
-        //    }
-        //    straightflush.Clear();
-        //    return straightflush;
-        //}
-
         //use recursion to get rid of pairs, then evaluate straight flush
         public static bool isStraightFlush(Hand hand)
         {
             hand.sortByRank();
             Hand simplifiedhand1, simplifiedhand2; //to be set the same as hand - cards are removed from this hand to evaluate straights separately without the interference of pairs or three-of-a-kind
-            for (var i = 0; i <= hand.Count() - 2; i++)
+            for (int i = 0; i <= hand.Count() - 2; i++)
             {
                 if (hand.getCard(i) == hand.getCard(i + 1))
                 {
@@ -154,94 +75,26 @@
                     simplifiedhand1.Remove(i);
                     simplifiedhand2 = new Hand(hand);
                     simplifiedhand2.Remove(i + 1);
-                    if (isStraightFlush(simplifiedhand1))
-                    {
+                    if (HandCombination.isStraightFlush(simplifiedhand1))
                         return true;
-                    }
-                    if (isStraightFlush(simplifiedhand2))
-                    {
+                    if (HandCombination.isStraightFlush(simplifiedhand2))
                         return true;
-                    }
                 }
             }
-            for (var i = 0; i <= hand.Count() - 5; i++)
+            for (int i = 0; i <= hand.Count() - 5; i++)
             {
                 int currentrank = hand.getCard(i).getRank(), currentsuit = hand.getCard(i).getSuit();
                 if (currentrank == hand.getCard(i + 1).getRank() + 1 && currentrank == hand.getCard(i + 2).getRank() + 2 && currentrank == hand.getCard(i + 3).getRank() + 3 && currentrank == hand.getCard(i + 4).getRank() + 4 && currentsuit == hand.getCard(i + 1).getSuit() && currentsuit == hand.getCard(i + 2).getSuit() && currentsuit == hand.getCard(i + 3).getSuit() && currentsuit == hand.getCard(i + 4).getSuit())
-                {
                     return true;
-                }
+                
             }
-            for (var i = 0; i <= hand.Count() - 4; i++)
+            for (int i = 0; i <= hand.Count() - 4; i++)
             {
                 int currentrank = hand.getCard(i).getRank(), currentsuit = hand.getCard(i).getSuit();
                 if (currentrank == 5 && hand.getCard(i + 1).getRank() == 4 && hand.getCard(i + 2).getRank() == 3 && hand.getCard(i + 3).getRank() == 2 && hand.getCard(0).getRank() == 14 && currentsuit == hand.getCard(i + 1).getSuit() && currentsuit == hand.getCard(i + 2).getSuit() && currentsuit == hand.getCard(i + 3).getSuit() && currentsuit == hand.getCard(0).getSuit())
-                {
                     return true;
-                }
             }
             return false;
-        }
-
-        //get straight flush using two pointer variable and taking care of all cases
-        public static Hand getStraightFlush(Hand hand)
-        {
-            hand.sortByRank();
-            Hand straightflush = new Hand();
-            straightflush.setValue(9);
-            if (hand.getCard(0).getRank() == 14)
-            {
-                hand.Add(new Card((int) RANK.ACE, hand.getCard(0).getSuit()));
-            }
-            //int straightflushCount = 1;
-            straightflush.Add(hand.getCard(0));
-            int ptr1 = 0, ptr2 = 1;
-            while (ptr1 < hand.Count() - 2 || ptr2 < hand.Count())
-            {
-                if (straightflush.Count() >= 5)
-                {
-                    break;
-                }
-                int rank1 = hand.getCard(ptr1).getRank(), rank2 = hand.getCard(ptr2).getRank();
-                int suit1 = hand.getCard(ptr1).getSuit(), suit2 = hand.getCard(ptr2).getSuit();
-                if (rank1 - rank2 == 1 && suit1 == suit2)
-                {
-                    straightflush.Add(hand.getCard(ptr2));
-                    ptr1 = ptr2;
-                    ptr2++;
-                }
-                else if (rank1 == 2 && rank2 == 14 && suit1 == suit2)
-                {
-                    straightflush.Add(hand.getCard(ptr2));
-                    ptr1 = ptr2;
-                    ptr2++;
-                }
-                else
-                {
-                    if (rank1 - rank2 <= 1)
-                    {
-                        ptr2++;
-                    }
-                    else
-                    {
-                        straightflush.Clear();
-                        straightflush.setValue(9);
-                        ptr1++;
-                        ptr2 = ptr1 + 1;
-                        straightflush.Add(hand.getCard(ptr1));
-                    }
-                }
-            }
-            if (hand.getCard(0).getRank() == 14)
-            {
-                hand.Remove(hand.Count() - 1);
-            }
-            straightflush.setValue(straightflush.getCard(0).getRank());
-            if (straightflush.Count() < 5)
-            {
-                straightflush.Clear();
-            }
-            return straightflush;
         }
 
         //easy algorithm to understand, just loop through the array and check for a certain amount of pairs
@@ -249,43 +102,20 @@
         public static bool isFourOfAKind(Hand hand)
         {
             hand.sortByRank();
-            for (var i = 0; i <= hand.Count() - 4; i++)
+            for (int i = 0; i <= hand.Count() - 4; i++)
             {
                 if (hand.getCard(i) == hand.getCard(i + 1) && hand.getCard(i) == hand.getCard(i + 2) && hand.getCard(i) == hand.getCard(i + 3))
-                {
                     return true;
-                }
             }
             return false;
-        }
-
-        //same as above except return the cards themselves
-        public static Hand getFourOfAKind(Hand hand)
-        {
-            Hand fourofakind = new Hand();
-            fourofakind.setValue(8);
-            hand.sortByRank();
-            for (var i = 0; i <= hand.Count() - 4; i++)
-            {
-                if (hand.getCard(i) == hand.getCard(i + 1) && hand.getCard(i) == hand.getCard(i + 2) && hand.getCard(i) == hand.getCard(i + 3))
-                {
-                    fourofakind.Add(hand.getCard(i));
-                    fourofakind.Add(hand.getCard(i + 1));
-                    fourofakind.Add(hand.getCard(i + 2));
-                    fourofakind.Add(hand.getCard(i + 3));
-                    fourofakind.setValue(hand.getCard(i).getRank());
-                    break;
-                }
-            }
-            return getKickers(hand, fourofakind);
         }
 
         public static bool isFullHouse(Hand hand)
         {
             hand.sortByRank();
             bool threeofakind = false, pair = false;
-            var threeofakindRank = 0;
-            for (var i = 0; i <= hand.Count() - 3; i++)
+            int threeofakindRank = 0;
+            for (int i = 0; i <= hand.Count() - 3; i++)
             {
                 if (hand.getCard(i) == hand.getCard(i + 1) && hand.getCard(i) == hand.getCard(i + 2))
                 {
@@ -294,7 +124,7 @@
                     break;
                 }
             }
-            for (var i = 0; i <= hand.Count() - 2; i++)
+            for (int i = 0; i <= hand.Count() - 2; i++)
             {
                 if (hand.getCard(i) == hand.getCard(i + 1) && hand.getCard(i).getRank() != threeofakindRank)
                 {
@@ -302,50 +132,10 @@
                     break;
                 }
             }
-            if (threeofakind && pair)
-            {
+            if (threeofakind == true && pair == true)
                 return true;
-            }
-            return false;
-        }
-
-        public static Hand getFullHouse(Hand hand)
-        {
-            hand.sortByRank();
-            Hand fullhouse = new Hand();
-            fullhouse.setValue(7);
-            bool threeofakind = false, pair = false;
-            var threeofakindRank = 0;
-            for (var i = 0; i <= hand.Count() - 3; i++)
-            {
-                if (hand.getCard(i) == hand.getCard(i + 1) && hand.getCard(i) == hand.getCard(i + 2))
-                {
-                    threeofakind = true;
-                    threeofakindRank = hand.getCard(i).getRank();
-                    fullhouse.Add(hand.getCard(i));
-                    fullhouse.Add(hand.getCard(i + 1));
-                    fullhouse.Add(hand.getCard(i + 2));
-                    fullhouse.setValue(hand.getCard(i).getRank());
-                    break;
-                }
-            }
-            for (var i = 0; i <= hand.Count() - 2; i++)
-            {
-                if (hand.getCard(i) == hand.getCard(i + 1) && hand.getCard(i).getRank() != threeofakindRank)
-                {
-                    pair = true;
-                    fullhouse.Add(hand.getCard(i));
-                    fullhouse.Add(hand.getCard(i + 1));
-                    fullhouse.setValue(hand.getCard(i).getRank());
-                    break;
-                }
-            }
-            if (threeofakind && pair)
-            {
-                return fullhouse;
-            }
-            fullhouse.Clear();
-            return fullhouse;
+            else
+                return false;
         }
 
         //use a counter, if a counter reaches five, a flush is detected
@@ -353,276 +143,76 @@
         {
             hand.sortByRank();
             int diamondCount = 0, clubCount = 0, heartCount = 0, spadeCount = 0;
-            for (var i = 0; i < hand.Count(); i++)
+            for (int i = 0; i < hand.Count(); i++)
             {
-                if ((SUIT) hand.getCard(i).getSuit() == SUIT.DIAMONDS)
-                {
+                if ((SUIT)hand.getCard(i).getSuit() == SUIT.DIAMONDS)
                     diamondCount++;
-                }
-                else if ((SUIT) hand.getCard(i).getSuit() == SUIT.CLUBS)
-                {
+                else if ((SUIT)hand.getCard(i).getSuit() == SUIT.CLUBS)
                     clubCount++;
-                }
-                else if ((SUIT) hand.getCard(i).getSuit() == SUIT.HEARTS)
-                {
+                else if ((SUIT)hand.getCard(i).getSuit() == SUIT.HEARTS)
                     heartCount++;
-                }
-                else if ((SUIT) hand.getCard(i).getSuit() == SUIT.SPADES)
-                {
+                else if ((SUIT)hand.getCard(i).getSuit() == SUIT.SPADES)
                     spadeCount++;
-                }
             }
             if (diamondCount >= 5)
-            {
                 return true;
-            }
-            if (clubCount >= 5)
-            {
-                return true;
-            }
-            if (heartCount >= 5)
-            {
-                return true;
-            }
-            if (spadeCount >= 5)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        //use a counter to determine with suit forms a flush
-        //then get all cards from the suit
-        public static Hand getFlush(Hand hand)
-        {
-            hand.sortByRank();
-            Hand flush = new Hand();
-            flush.setValue(6);
-            int diamondCount = 0, clubCount = 0, heartCount = 0, spadeCount = 0;
-            for (var i = 0; i < hand.Count(); i++)
-            {
-                if ((SUIT) hand.getCard(i).getSuit() == SUIT.DIAMONDS)
-                {
-                    diamondCount++;
-                }
-                else if ((SUIT) hand.getCard(i).getSuit() == SUIT.CLUBS)
-                {
-                    clubCount++;
-                }
-                else if ((SUIT) hand.getCard(i).getSuit() == SUIT.HEARTS)
-                {
-                    heartCount++;
-                }
-                else if ((SUIT) hand.getCard(i).getSuit() == SUIT.SPADES)
-                {
-                    spadeCount++;
-                }
-            }
-            if (diamondCount >= 5)
-            {
-                for (var i = 0; i < hand.Count(); i++)
-                {
-                    if (hand.getCard(i).getSuit() == 1)
-                    {
-                        flush.Add(hand.getCard(i));
-                        flush.setValue(hand.getCard(i).getRank());
-                    }
-                    if (flush.Count() == 5)
-                    {
-                        break;
-                    }
-                }
-                //return flush;
-            }
             else if (clubCount >= 5)
-            {
-                for (var i = 0; i <= hand.Count(); i++)
-                {
-                    if (hand.getCard(i).getSuit() == 2)
-                    {
-                        flush.Add(hand.getCard(i));
-                        flush.setValue(hand.getCard(i).getRank());
-                    }
-                    if (flush.Count() == 5)
-                    {
-                        break;
-                    }
-                }
-                //return flush;
-            }
+                return true;
             else if (heartCount >= 5)
-            {
-                for (var i = 0; i <= hand.Count(); i++)
-                {
-                    if (hand.getCard(i).getSuit() == 3)
-                    {
-                        flush.Add(hand.getCard(i));
-                        flush.setValue(hand.getCard(i).getRank());
-                    }
-                    if (flush.Count() == 5)
-                    {
-                        break;
-                    }
-                }
-                //return flush;
-            }
+                return true;
             else if (spadeCount >= 5)
-            {
-                for (var i = 0; i <= hand.Count(); i++)
-                {
-                    if (hand.getCard(i).getSuit() == 4)
-                    {
-                        flush.Add(hand.getCard(i));
-                        flush.setValue(hand.getCard(i).getRank());
-                    }
-                    if (flush.Count() == 5)
-                    {
-                        break;
-                    }
-                }
-                //return flush;
-            }
-            return flush;
+                return true;
+            return false;
         }
 
         //explanation below
         public static bool isStraight(Hand hand)
         {
             hand.sortByRank();
-            if (hand.getCard(0).getRank() == 14)
-            {
-                hand.Add(new Card((int) RANK.ACE, hand.getCard(0).getSuit()));
-            }
-            var straightCount = 1;
-            for (var i = 0; i <= hand.Count() - 2; i++)
+            if(hand.getCard(0).getRank()==14)
+                hand.Add(new Card((int)RANK.ACE,hand.getCard(0).getSuit()));
+            int straightCount=1;
+            for (int i = 0; i <= hand.Count() - 2; i++)
             {
                 //if 5 cards are found to be straights, break out of the loop
                 if (straightCount == 5)
-                {
                     break;
-                }
                 int currentrank = hand.getCard(i).getRank();
                 //if cards suit differ by 1, increment straight
                 if (currentrank - hand.getCard(i + 1).getRank() == 1)
-                {
                     straightCount++;
-                }
                 //specific condition for 2-A
                 else if (currentrank == 2 && hand.getCard(i + 1).getRank() == 14)
-                {
                     straightCount++;
-                }
                 //if cards suit differ by more than 1, reset straight to 1
                 else if (currentrank - hand.getCard(i + 1).getRank() > 1)
-                {
                     straightCount = 1;
-                }
                 //if card suits does not differ, do nothing
             }
             if (hand.getCard(0).getRank() == 14)
-            {
                 hand.Remove(hand.Count() - 1);
-            }
             //depending on the straight count, return true or false
             if (straightCount == 5)
-            {
                 return true;
-            }
             return false;
-        }
-
-        //explaination below, same as isStraight except return cards
-        public static Hand getStraight(Hand hand)
-        {
-            hand.sortByRank();
-            Hand straight = new Hand();
-            straight.setValue(5);
-            if (hand.getCard(0).getRank() == 14)
-            {
-                hand.Add(new Card((int) RANK.ACE, hand.getCard(0).getSuit()));
-            }
-            var straightCount = 1;
-            straight.Add(hand.getCard(0));
-            for (var i = 0; i <= hand.Count() - 2; i++)
-            {
-                //if 5 cards are found to be straights, break out of the loop
-                if (straightCount == 5)
-                {
-                    break;
-                }
-                int currentrank = hand.getCard(i).getRank();
-                //if cards suit differ by 1, increment straight
-                if (currentrank - hand.getCard(i + 1).getRank() == 1)
-                {
-                    straightCount++;
-                    straight.Add(hand.getCard(i + 1));
-                }
-                //specific condition for 2-A
-                else if (currentrank == 2 && hand.getCard(i + 1).getRank() == 14)
-                {
-                    straightCount++;
-                    straight.Add(hand.getCard(i + 1));
-                }
-                //if cards suit differ by more than 1, reset straight to 1
-                else if (currentrank - hand.getCard(i + 1).getRank() > 1)
-                {
-                    straightCount = 1;
-                    straight.Clear();
-                    straight.setValue(5);
-                    straight.Add(hand.getCard(i + 1));
-                }
-                //if card suits does not differ, do nothing
-            }
-            //depending on the straight count, return true or false
-            if (hand.getCard(0).getRank() == 14)
-            {
-                hand.Remove(hand.Count() - 1);
-            }
-            if (straightCount != 5)
-            {
-                straight.Clear();
-            }
-            straight.setValue(straight.getCard(0).getRank());
-            return straight;
         }
 
         public static bool isThreeOfAKind(Hand hand)
         {
             hand.sortByRank();
-            for (var i = 0; i <= hand.Count() - 3; i++)
+            for (int i = 0; i <= hand.Count() - 3; i++)
             {
                 if (hand.getCard(i) == hand.getCard(i + 1) && hand.getCard(i) == hand.getCard(i + 2))
-                {
                     return true;
-                }
             }
             return false;
         }
-
-        public static Hand getThreeOfAKind(Hand hand)
-        {
-            hand.sortByRank();
-            Hand threeofakind = new Hand();
-            threeofakind.setValue(4);
-            for (var i = 0; i <= hand.Count() - 3; i++)
-            {
-                if (hand.getCard(i) == hand.getCard(i + 1) && hand.getCard(i) == hand.getCard(i + 2))
-                {
-                    threeofakind.setValue(hand.getCard(i).getRank());
-                    threeofakind.Add(hand.getCard(i));
-                    threeofakind.Add(hand.getCard(i + 1));
-                    threeofakind.Add(hand.getCard(i + 2));
-                    break;
-                }
-            }
-            return getKickers(hand, threeofakind);
-        }
-
+        
         public static bool isTwoPair(Hand hand)
         {
             hand.sortByRank();
-            var pairCount = 0;
-            for (var i = 0; i <= hand.Count() - 2; i++)
+            int pairCount = 0;
+            for (int i = 0; i <= hand.Count() - 2; i++)
             {
                 if (hand.getCard(i) == hand.getCard(i + 1))
                 {
@@ -631,109 +221,48 @@
                 }
             }
             if (pairCount >= 2)
-            {
                 return true;
-            }
-            return false;
+            else
+                return false;
         }
-
-        public static Hand getTwoPair(Hand hand)
-        {
-            hand.sortByRank();
-            Hand twopair = new Hand();
-            twopair.setValue(3);
-            var pairCount = 0;
-            for (var i = 0; i <= hand.Count() - 2; i++)
-            {
-                if (hand.getCard(i) == hand.getCard(i + 1))
-                {
-                    twopair.setValue(hand.getCard(i).getRank());
-                    twopair.Add(hand.getCard(i));
-                    twopair.Add(hand.getCard(i + 1));
-                    pairCount++;
-                    if (pairCount == 2)
-                    {
-                        break;
-                    }
-                    i++; //the pair has already been checked, i must be incremented an additional time to avoid using a card in this pair again. This prevents the program from identifying 3 of a kind as 2 pairs.
-                }
-            }
-            if (pairCount == 2)
-            {
-                return getKickers(hand, twopair);
-            }
-            twopair.Clear();
-            return twopair;
-        }
-
         public static bool isOnePair(Hand hand)
         {
             hand.sortByRank();
-            for (var i = 0; i <= hand.Count() - 2; i++)
+            for (int i = 0; i <= hand.Count() - 2; i++)
             {
                 if (hand.getCard(i) == hand.getCard(i + 1))
-                {
                     return true;
-                }
             }
             return false;
         }
 
-        public static Hand getOnePair(Hand hand)
+        private List<Card> SortByRank(List<Card> myCards)
         {
-            hand.sortByRank();
-            Hand onepair = new Hand();
-            onepair.setValue(2);
-            for (var i = 0; i <= hand.Count() - 2; i++)
+            var random = new Random();
+            
+            var pivot = myCards[random.Next(myCards.Count())];
+            myCards.Remove(pivot);
+
+            var less = new List<Card>();
+            var greater = new List<Card>();
+            // Assign values to less or greater list
+            foreach (Card i in myCards)
             {
-                if (hand.getCard(i) == hand.getCard(i + 1))
+                if (i > pivot)
                 {
-                    onepair.setValue(hand.getCard(i).getRank());
-                    onepair.Add(hand.getCard(i));
-                    onepair.Add(hand.getCard(i + 1));
-                    break;
+                    greater.Add(i);
+                }
+                else if (i <= pivot)
+                {
+                    less.Add(i);
                 }
             }
-            return getKickers(hand, onepair);
-        }
-
-        //public static bool isHighCard(Hand hand)
-        //{
-        //    return true;
-        //}
-
-        //get highest cards after sorting
-        public static Hand getHighCard(Hand hand)
-        {
-            hand.sortByRank();
-            Hand highcard = new Hand();
-            highcard.setValue(1);
-            highcard.Add(hand.getCard(0));
-            highcard.setValue(hand.getCard(0).getRank());
-            return getKickers(hand, highcard);
-        }
-
-        //get all remaining cards, if necessary, to form 5 cards
-        private static Hand getKickers(Hand hand, Hand specialCards)
-        {
-            if (specialCards.Count() == 0)
-            {
-                return specialCards;
-            }
-            for (var i = 0; i < specialCards.Count(); i++)
-            {
-                hand.Remove(specialCards.getCard(i));
-            }
-            for (var i = 0; i < hand.Count(); i++)
-            {
-                if (specialCards.Count() >= 5)
-                {
-                    break;
-                }
-                specialCards.Add(hand.getCard(i));
-                specialCards.setValue(hand.getCard(i).getRank());
-            }
-            return specialCards;
+            // Recurse for less and greaterlists
+            var list = new List<Card>();
+            list.AddRange(SortByRank(greater));
+            list.Add(pivot);
+            list.AddRange(SortByRank(less));
+            return list;
         }
     }
 }
