@@ -43,8 +43,7 @@
     <Compile Include="Ai.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="HandCombination.cs" />
-    <Compile Include="HandTypes.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SmokinAcesPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

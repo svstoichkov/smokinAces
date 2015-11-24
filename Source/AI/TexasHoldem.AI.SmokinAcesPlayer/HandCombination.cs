@@ -4,51 +4,54 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Logic;
+
     using TexasHoldem.Logic.Cards;
 
     public static class HandCombination
     {
-        public static HandType GetBestHandEfficiently(List<Card> hand)
-        {
-            if (IsStraightFlush(hand))
-            {
-                return HandType.Flush;
-            }
-            if (IsFourOfAKind(hand))
-            {
-                return HandType.FourOfAKind;
-            }
-            if (IsFullHouse(hand))
-            {
-                return HandType.FullHouse;
-            }
-            if (IsFlush(hand))
-            {
-                return HandType.Flush;
-            }
-            if (IsStraight(hand))
-            {
-                return HandType.Straight;
-            }
-            if (IsThreeOfAKind(hand))
-            {
-                return HandType.ThreeOfAKind;
-            }
-            if (IsTwoPair(hand))
-            {
-                return HandType.TwoPair;
-            }
-            if (IsOnePair(hand))
-            {
-                return HandType.OnePair;
-            }
-
-            return HandType.HighCard;
-        }
-
-        private static bool IsStraightFlush(List<Card> hand)
+        public static HandRankType GetBestHand(List<Card> hand)
         {
             var sortedHand = SortByRank(hand);
+
+            if (IsStraightFlush(sortedHand))
+            {
+                return HandRankType.Flush;
+            }
+            if (IsFourOfAKind(sortedHand))
+            {
+                return HandRankType.FourOfAKind;
+            }
+            if (IsFullHouse(sortedHand))
+            {
+                return HandRankType.FullHouse;
+            }
+            if (IsFlush(sortedHand))
+            {
+                return HandRankType.Flush;
+            }
+            if (IsStraight(sortedHand))
+            {
+                return HandRankType.Straight;
+            }
+            if (IsThreeOfAKind(sortedHand))
+            {
+                return HandRankType.ThreeOfAKind;
+            }
+            if (IsTwoPair(sortedHand))
+            {
+                return HandRankType.TwoPairs;
+            }
+            if (IsOnePair(sortedHand))
+            {
+                return HandRankType.Pair;
+            }
+
+            return HandRankType.HighCard;
+        }
+
+        private static bool IsStraightFlush(List<Card> sortedHand)
+        {
 
             for (var i = 0; i < sortedHand.Count - 4; i++)
             {
@@ -68,11 +71,9 @@
             return false;
         }
 
-        private static bool IsFourOfAKind(List<Card> hand)
+        private static bool IsFourOfAKind(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
-
-            for (var i = 0; i < hand.Count() - 3; i++)
+            for (var i = 0; i < sortedHand.Count() - 3; i++)
             {
                 if (sortedHand[i].Type == sortedHand[i + 1].Type && sortedHand[i].Type == sortedHand[i + 2].Type && sortedHand[i].Type == sortedHand[i + 3].Type)
                 {
@@ -82,15 +83,13 @@
             return false;
         }
 
-        private static bool IsFullHouse(List<Card> hand)
+        private static bool IsFullHouse(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
-
             var threeOfAKind = false;
             var pair = false;
             var threeOfAKindType = 0;
 
-            for (var i = 0; i < hand.Count() - 2; i++)
+            for (var i = 0; i < sortedHand.Count() - 2; i++)
             {
                 if (sortedHand[i].Type == sortedHand[i + 1].Type && sortedHand[i].Type == sortedHand[i + 2].Type)
                 {
@@ -100,7 +99,7 @@
                 }
             }
 
-            for (var i = 0; i <= hand.Count() - 2; i++)
+            for (var i = 0; i <= sortedHand.Count() - 2; i++)
             {
                 if (sortedHand[i].Type == sortedHand[i + 1].Type && (int) sortedHand[i].Type != threeOfAKindType)
                 {
@@ -117,12 +116,12 @@
             return false;
         }
 
-        private static bool IsFlush(List<Card> hand)
+        private static bool IsFlush(List<Card> sortedHand)
         {
             int diamondCount = 0, clubCount = 0, heartCount = 0, spadeCount = 0;
-            for (var i = 0; i < hand.Count(); i++)
+            for (var i = 0; i < sortedHand.Count(); i++)
             {
-                switch (hand[i].Suit)
+                switch (sortedHand[i].Suit)
                 {
                     case CardSuit.Diamond:
                         diamondCount++;
@@ -146,10 +145,8 @@
             return false;
         }
 
-        private static bool IsStraight(List<Card> hand)
+        private static bool IsStraight(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
-
             for (var i = 0; i < sortedHand.Count - 4; i++)
             {
                 if ((int) sortedHand[i].Type == (int) sortedHand[i + 1].Type - 1 &&
@@ -164,10 +161,9 @@
             return false;
         }
 
-        private static bool IsThreeOfAKind(List<Card> hand)
+        private static bool IsThreeOfAKind(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
-            for (var i = 0; i < hand.Count() - 2; i++)
+            for (var i = 0; i < sortedHand.Count() - 2; i++)
             {
                 if (sortedHand[i].Type == sortedHand[i + 1].Type && sortedHand[i].Type == sortedHand[i + 2].Type)
                 {
@@ -177,18 +173,14 @@
             return false;
         }
 
-        private static bool IsTwoPair(List<Card> hand)
+        private static bool IsTwoPair(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
             var pairCount = 0;
-            for (var i = 0; i < hand.Count() - 1; i++)
+            for (var i = 0; i < sortedHand.Count() - 1; i++)
             {
                 if (sortedHand[i].Type == sortedHand[i + 1].Type)
                 {
                     pairCount++;
-
-                    //the pair has already been checked, i must be incremented an additional time to avoid using a card in this pair again. 
-                    //This prevents the program from identifying 3 of a kind as 2 pairs.
                     i++;
                 }
             }
@@ -200,10 +192,9 @@
             return false;
         }
 
-        private static bool IsOnePair(List<Card> hand)
+        private static bool IsOnePair(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
-            for (var i = 0; i < hand.Count() - 1; i++)
+            for (var i = 0; i < sortedHand.Count() - 1; i++)
             {
                 if (sortedHand[i].Type == sortedHand[i + 1].Type)
                 {
@@ -213,17 +204,23 @@
             return false;
         }
 
-        private static List<Card> SortByRank(List<Card> cards)
+        public static List<Card> SortByRank(List<Card> cards)
         {
+            var newList = new List<Card>(cards);
             var random = new Random();
 
-            var pivot = cards[random.Next(cards.Count())];
-            cards.Remove(pivot);
+            if (newList.Count() <= 1)
+            {
+                return newList;
+            }
+
+            var pivot = newList[random.Next(newList.Count())];
+            newList.Remove(pivot);
 
             var less = new List<Card>();
             var greater = new List<Card>();
             // Assign values to less or greater list
-            foreach (var card in cards)
+            foreach (var card in newList)
             {
                 if (card.Type > pivot.Type)
                 {

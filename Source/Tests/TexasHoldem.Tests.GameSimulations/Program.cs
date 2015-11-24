@@ -8,22 +8,20 @@
     {
         public static void Main()
         {
-            SimulateGames(new SmartVsAlwaysCallPlayerSimulation());
-            SimulateGames(new SmartVsDummyPlayerSimulator());
-            SimulateGames(new SmartVsSmartPlayerSimulator());
-            SimulateGames(new AlwaysCallPlayersGameSimulation());
+            SimulateGames(new SmartVsSmokinAces());
         }
 
         private static void SimulateGames(IGameSimulator gameSimulator)
         {
             Console.WriteLine($"Running {gameSimulator.GetType().Name}...");
 
-            var simulationResult = gameSimulator.Simulate(10000);
+            var simulationResult = gameSimulator.Simulate(5);
 
             Console.WriteLine(simulationResult.SimulationDuration);
             Console.WriteLine($"Total games: {simulationResult.FirstPlayerWins:0,0} - {simulationResult.SecondPlayerWins:0,0}");
             Console.WriteLine($"Hands played: {simulationResult.HandsPlayed:0,0}");
             Console.WriteLine(new string('=', 75));
+            Console.ReadLine();
         }
     }
 }
