@@ -44,7 +44,6 @@
             }
 
             return PlayerAction.CheckOrCall();
-            return PlayerAction.Raise();
         }
     }
 }

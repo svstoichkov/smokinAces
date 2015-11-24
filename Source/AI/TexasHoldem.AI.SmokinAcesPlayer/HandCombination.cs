@@ -8,37 +8,39 @@
 
     public static class HandCombination
     {
-        public static HandType GetBestHandEfficiently(List<Card> hand)
+        public static HandType GetBestHand(List<Card> hand)
         {
-            if (IsStraightFlush(hand))
+            var sortedHand = SortByRank(hand);
+
+            if (IsStraightFlush(sortedHand))
             {
                 return HandType.Flush;
             }
-            if (IsFourOfAKind(hand))
+            if (IsFourOfAKind(sortedHand))
             {
                 return HandType.FourOfAKind;
             }
-            if (IsFullHouse(hand))
+            if (IsFullHouse(sortedHand))
             {
                 return HandType.FullHouse;
             }
-            if (IsFlush(hand))
+            if (IsFlush(sortedHand))
             {
                 return HandType.Flush;
             }
-            if (IsStraight(hand))
+            if (IsStraight(sortedHand))
             {
                 return HandType.Straight;
             }
-            if (IsThreeOfAKind(hand))
+            if (IsThreeOfAKind(sortedHand))
             {
                 return HandType.ThreeOfAKind;
             }
-            if (IsTwoPair(hand))
+            if (IsTwoPair(sortedHand))
             {
                 return HandType.TwoPair;
             }
-            if (IsOnePair(hand))
+            if (IsOnePair(sortedHand))
             {
                 return HandType.OnePair;
             }
@@ -46,9 +48,8 @@
             return HandType.HighCard;
         }
 
-        private static bool IsStraightFlush(List<Card> hand)
+        private static bool IsStraightFlush(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
 
             for (var i = 0; i < sortedHand.Count - 4; i++)
             {
@@ -68,11 +69,9 @@
             return false;
         }
 
-        private static bool IsFourOfAKind(List<Card> hand)
+        private static bool IsFourOfAKind(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
-
-            for (var i = 0; i < hand.Count() - 3; i++)
+            for (var i = 0; i < sortedHand.Count() - 3; i++)
             {
                 if (sortedHand[i].Type == sortedHand[i + 1].Type && sortedHand[i].Type == sortedHand[i + 2].Type && sortedHand[i].Type == sortedHand[i + 3].Type)
                 {
@@ -82,15 +81,13 @@
             return false;
         }
 
-        private static bool IsFullHouse(List<Card> hand)
+        private static bool IsFullHouse(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
-
             var threeOfAKind = false;
             var pair = false;
             var threeOfAKindType = 0;
 
-            for (var i = 0; i < hand.Count() - 2; i++)
+            for (var i = 0; i < sortedHand.Count() - 2; i++)
             {
                 if (sortedHand[i].Type == sortedHand[i + 1].Type && sortedHand[i].Type == sortedHand[i + 2].Type)
                 {
@@ -100,7 +97,7 @@
                 }
             }
 
-            for (var i = 0; i <= hand.Count() - 2; i++)
+            for (var i = 0; i <= sortedHand.Count() - 2; i++)
             {
                 if (sortedHand[i].Type == sortedHand[i + 1].Type && (int) sortedHand[i].Type != threeOfAKindType)
                 {
@@ -117,12 +114,12 @@
             return false;
         }
 
-        private static bool IsFlush(List<Card> hand)
+        private static bool IsFlush(List<Card> sortedHand)
         {
             int diamondCount = 0, clubCount = 0, heartCount = 0, spadeCount = 0;
-            for (var i = 0; i < hand.Count(); i++)
+            for (var i = 0; i < sortedHand.Count(); i++)
             {
-                switch (hand[i].Suit)
+                switch (sortedHand[i].Suit)
                 {
                     case CardSuit.Diamond:
                         diamondCount++;
@@ -146,10 +143,8 @@
             return false;
         }
 
-        private static bool IsStraight(List<Card> hand)
+        private static bool IsStraight(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
-
             for (var i = 0; i < sortedHand.Count - 4; i++)
             {
                 if ((int) sortedHand[i].Type == (int) sortedHand[i + 1].Type - 1 &&
@@ -164,10 +159,9 @@
             return false;
         }
 
-        private static bool IsThreeOfAKind(List<Card> hand)
+        private static bool IsThreeOfAKind(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
-            for (var i = 0; i < hand.Count() - 2; i++)
+            for (var i = 0; i < sortedHand.Count() - 2; i++)
             {
                 if (sortedHand[i].Type == sortedHand[i + 1].Type && sortedHand[i].Type == sortedHand[i + 2].Type)
                 {
@@ -177,18 +171,14 @@
             return false;
         }
 
-        private static bool IsTwoPair(List<Card> hand)
+        private static bool IsTwoPair(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
             var pairCount = 0;
-            for (var i = 0; i < hand.Count() - 1; i++)
+            for (var i = 0; i < sortedHand.Count() - 1; i++)
             {
                 if (sortedHand[i].Type == sortedHand[i + 1].Type)
                 {
                     pairCount++;
-
-                    //the pair has already been checked, i must be incremented an additional time to avoid using a card in this pair again. 
-                    //This prevents the program from identifying 3 of a kind as 2 pairs.
                     i++;
                 }
             }
@@ -200,10 +190,9 @@
             return false;
         }
 
-        private static bool IsOnePair(List<Card> hand)
+        private static bool IsOnePair(List<Card> sortedHand)
         {
-            var sortedHand = SortByRank(hand);
-            for (var i = 0; i < hand.Count() - 1; i++)
+            for (var i = 0; i < sortedHand.Count() - 1; i++)
             {
                 if (sortedHand[i].Type == sortedHand[i + 1].Type)
                 {
@@ -213,17 +202,23 @@
             return false;
         }
 
-        private static List<Card> SortByRank(List<Card> cards)
+        public static List<Card> SortByRank(List<Card> cards)
         {
+            var newList = new List<Card>(cards);
             var random = new Random();
 
-            var pivot = cards[random.Next(cards.Count())];
-            cards.Remove(pivot);
+            if (newList.Count() <= 1)
+            {
+                return newList;
+            }
+
+            var pivot = newList[random.Next(newList.Count())];
+            newList.Remove(pivot);
 
             var less = new List<Card>();
             var greater = new List<Card>();
             // Assign values to less or greater list
-            foreach (var card in cards)
+            foreach (var card in newList)
             {
                 if (card.Type > pivot.Type)
                 {
