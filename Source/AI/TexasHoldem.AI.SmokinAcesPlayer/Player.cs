@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-namespace Holdem
+﻿namespace TexasHoldem.AI.SmokinAcesPlayer
 {
+    using System;
+    using System.ComponentModel;
+
     /// <summary>
     /// this class includes the chipStack of the individual players and actions they can make
     /// in poker, a very important class
@@ -24,346 +22,346 @@ namespace Holdem
         //various propeties
         public string Name
         {
-            get { return name; }
-            set { name = value; }
+            get { return this.name; }
+            set { this.name = value; }
         }
         public int ChipStack
         {
-            get { return chipStack; }
+            get { return this.chipStack; }
             set
             {
                 if (value < 0)
                     value = 0;
-                chipStack = value;
-                InvokePropertyChanged(new PropertyChangedEventArgs("ChipStack"));
+                this.chipStack = value;
+                this.InvokePropertyChanged(new PropertyChangedEventArgs("ChipStack"));
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void InvokePropertyChanged(PropertyChangedEventArgs e)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
+            PropertyChangedEventHandler handler = this.PropertyChanged;
             if (handler != null) handler(this, e);
         }
         public int AmountContributed
         {
-            get { return amountContributed; }
-            set { amountContributed = value; }
+            get { return this.amountContributed; }
+            set { this.amountContributed = value; }
         }
         public string Message
         {
             get
             {
-                return message;
+                return this.message;
             }
             set
             {
-                message = value;
+                this.message = value;
             }
         }
         public string SimplifiedMessage
         {
             get
             {
-                return simplifiedMessage;
+                return this.simplifiedMessage;
             }
             set
             {
-                simplifiedMessage = value;
-                InvokePropertyChanged(new PropertyChangedEventArgs("SimplifiedMessage"));
+                this.simplifiedMessage = value;
+                this.InvokePropertyChanged(new PropertyChangedEventArgs("SimplifiedMessage"));
             }
         }
         public int InitialStack
         {
-            get { return initialStack; }
+            get { return this.initialStack; }
             set
             {
                 if (value < 0)
                     value = 0;
-                initialStack = value;
+                this.initialStack = value;
             }
         }
         public int AmountInPot
         {
-            get { return amountInPot; }
+            get { return this.amountInPot; }
             set
             {
                 if (value < 0)
                     value = 0;
-                amountInPot = value;
+                this.amountInPot = value;
             }
         }
         public int getAmountToCall(Pot mainPot)
         {
-            return mainPot.getMaximumAmountPutIn() - amountInPot;
+            return mainPot.getMaximumAmountPutIn() - this.amountInPot;
         }
         //contruct player name and chipstack
         public Player()
         {
             this.name = "You";
-            ChipStack = 10000;
-            amountInPot = 0;
-            initialStack = ChipStack;
-            folded = false;
-            message = "No decision has been made";
-            simplifiedMessage = "";
-            isbusted = false;
+            this.ChipStack = 10000;
+            this.amountInPot = 0;
+            this.initialStack = this.ChipStack;
+            this.folded = false;
+            this.message = "No decision has been made";
+            this.simplifiedMessage = "";
+            this.isbusted = false;
         }
         public Player(int buyInAmount)
         {
-            ChipStack = buyInAmount;
-            initialStack = ChipStack;
-            amountInPot = 0;
-            folded = false;
-            message = "No decision has been made";
-            simplifiedMessage = "";
-            isbusted = false;
+            this.ChipStack = buyInAmount;
+            this.initialStack = this.ChipStack;
+            this.amountInPot = 0;
+            this.folded = false;
+            this.message = "No decision has been made";
+            this.simplifiedMessage = "";
+            this.isbusted = false;
         }
         public Player(string name, int buyInAmount)
         {
             if (name == "")
                 name = "You";
             this.name = name;
-            ChipStack = buyInAmount;
-            initialStack = ChipStack;
-            amountInPot = 0;
-            folded = false;
-            message = "No decision has been made";
-            simplifiedMessage = "";
-            isbusted = false;
+            this.ChipStack = buyInAmount;
+            this.initialStack = this.ChipStack;
+            this.amountInPot = 0;
+            this.folded = false;
+            this.message = "No decision has been made";
+            this.simplifiedMessage = "";
+            this.isbusted = false;
         }
         public Hand getHand()
         {
-            return myHand;
+            return this.myHand;
         }
         //add hands to hand
         public void AddToHand(Hand hand)
         {
-            myHand += hand;
+            this.myHand += hand;
         }
         public void AddToHand(Card card)
         {
-            myHand.Add(card);
+            this.myHand.Add(card);
         }
         //pay the small and big blinds
         public void PaySmallBlind(int amount, Pot mainPot)
         {
-            if (ChipStack <= amount)
+            if (this.ChipStack <= amount)
             {
-                AllIn(mainPot);
+                this.AllIn(mainPot);
                 return;
             }
-            ChipStack -= amount;
-            amountInPot += amount;
+            this.ChipStack -= amount;
+            this.amountInPot += amount;
             mainPot.Add(amount);
             mainPot.AddPlayer(this);
-            mainPot.setMaximumAmount(amountInPot);
+            mainPot.setMaximumAmount(this.amountInPot);
             mainPot.MinimumRaise = amount;
-            Message = this.Name + " pays the small blind";
-            SimplifiedMessage = "SMALL BLIND " + amount;
+            this.Message = this.Name + " pays the small blind";
+            this.SimplifiedMessage = "SMALL BLIND " + amount;
         }
         //some functions have index as they are needed to reset the agressor index to continue the round
         public void PaySmallBlind(int amount, Pot mainPot,int index)
         {
-            if (ChipStack <= amount)
+            if (this.ChipStack <= amount)
             {
-                AllIn(mainPot,index);
+                this.AllIn(mainPot,index);
                 return;
             }
-            ChipStack -= amount;
-            amountInPot += amount;
+            this.ChipStack -= amount;
+            this.amountInPot += amount;
             mainPot.Add(amount);
             mainPot.AddPlayer(this);
-            mainPot.setMaximumAmount(amountInPot);
+            mainPot.setMaximumAmount(this.amountInPot);
             mainPot.MinimumRaise = amount;
-            Message = this.Name + " pays the small blind";
-            SimplifiedMessage = "SMALL BLIND " + amount;
+            this.Message = this.Name + " pays the small blind";
+            this.SimplifiedMessage = "SMALL BLIND " + amount;
         }
         public void PayBigBlind(int amount, Pot mainPot)
         {
-            if (ChipStack <= amount)
+            if (this.ChipStack <= amount)
             {
-                AllIn(mainPot);
+                this.AllIn(mainPot);
                 return;
             }
-            Message = "Pay blind of " + amount.ToString("c0");
-            ChipStack -= amount;
-            amountInPot += amount;
+            this.Message = "Pay blind of " + amount.ToString("c0");
+            this.ChipStack -= amount;
+            this.amountInPot += amount;
             mainPot.Add(amount);
             mainPot.AddPlayer(this);
-            mainPot.setMaximumAmount(amountInPot);
+            mainPot.setMaximumAmount(this.amountInPot);
             mainPot.MinimumRaise = amount;
-            Message = this.Name + " pays the big blind";
-            SimplifiedMessage = "BIG BLIND " + amount;
+            this.Message = this.Name + " pays the big blind";
+            this.SimplifiedMessage = "BIG BLIND " + amount;
         }
         public void PayBigBlind(int amount, Pot mainPot, int index)
         {
-            if (ChipStack <= amount)
+            if (this.ChipStack <= amount)
             {
-                AllIn(mainPot,index);
+                this.AllIn(mainPot,index);
                 return;
             }
-            Message = "Pay blind of " + amount.ToString("c0");
-            ChipStack -= amount;
-            amountInPot += amount;
+            this.Message = "Pay blind of " + amount.ToString("c0");
+            this.ChipStack -= amount;
+            this.amountInPot += amount;
             mainPot.Add(amount);
             mainPot.AddPlayer(this);
-            mainPot.setMaximumAmount(amountInPot);
+            mainPot.setMaximumAmount(this.amountInPot);
             mainPot.MinimumRaise = amount;
-            Message = this.Name + " pays the big blind";
-            SimplifiedMessage = "BIG BLIND " + amount;
+            this.Message = this.Name + " pays the big blind";
+            this.SimplifiedMessage = "BIG BLIND " + amount;
             mainPot.AgressorIndex = index;
         }
         //leave the round
         public void Fold(Pot mainPot)
         {
 
-            folded = true;
+            this.folded = true;
             mainPot.getPlayersInPot().Remove(this);
-            Message = "Fold";
-            SimplifiedMessage = "FOLDED";
+            this.Message = "Fold";
+            this.SimplifiedMessage = "FOLDED";
 
         }
         public bool IsFolded()
         {
-            return folded;
+            return this.folded;
         }
         //don't bet
         public void Check(Pot mainPot)
         {
-            Message = "Check";
-            SimplifiedMessage = "CHECK";
+            this.Message = "Check";
+            this.SimplifiedMessage = "CHECK";
         }
         //bet enough to stay in the round
         public void Call(Pot mainPot)
         {
             
-            int amount = mainPot.getMaximumAmountPutIn() - amountInPot;
-            if (ChipStack <= amount)
+            int amount = mainPot.getMaximumAmountPutIn() - this.amountInPot;
+            if (this.ChipStack <= amount)
             {
-                AllIn(mainPot);
+                this.AllIn(mainPot);
                 return;
             }
-            ChipStack -= amount;
-            amountInPot += amount;
+            this.ChipStack -= amount;
+            this.amountInPot += amount;
             mainPot.Add(amount);
             mainPot.AddPlayer(this);
-            Message = "Call " + amount.ToString("c0");
-            SimplifiedMessage = "CALL " + amount;
+            this.Message = "Call " + amount.ToString("c0");
+            this.SimplifiedMessage = "CALL " + amount;
         }
         //call and bet additional amount of money
         public void Raise(int raise, Pot mainPot)
         {
-            int amount = mainPot.getMaximumAmountPutIn() + raise - amountInPot;
-            if (ChipStack <= amount)
+            int amount = mainPot.getMaximumAmountPutIn() + raise - this.amountInPot;
+            if (this.ChipStack <= amount)
             {
-                AllIn(mainPot);
+                this.AllIn(mainPot);
                 return;
             }
-            ChipStack -= amount;
-            amountInPot += amount;
+            this.ChipStack -= amount;
+            this.amountInPot += amount;
             mainPot.Add(amount);
-            mainPot.setMaximumAmount(amountInPot);
+            mainPot.setMaximumAmount(this.amountInPot);
             mainPot.AddPlayer(this);
             mainPot.MinimumRaise = raise;
-            Message = "Call " + (amount - raise).ToString("c0") + " and raise " + raise.ToString("c0");
-            SimplifiedMessage = "RAISE " + (amount - raise);
+            this.Message = "Call " + (amount - raise).ToString("c0") + " and raise " + raise.ToString("c0");
+            this.SimplifiedMessage = "RAISE " + (amount - raise);
         }
         public void Raise(int raise, Pot mainPot, int index)
         {
-            int amount = mainPot.getMaximumAmountPutIn() + raise - amountInPot;
-            if (ChipStack <= amount)
+            int amount = mainPot.getMaximumAmountPutIn() + raise - this.amountInPot;
+            if (this.ChipStack <= amount)
             {
-                AllIn(mainPot,index);
+                this.AllIn(mainPot,index);
                 return;
             }
-            ChipStack -= amount;
-            amountInPot += amount;
+            this.ChipStack -= amount;
+            this.amountInPot += amount;
             mainPot.Add(amount);
-            mainPot.setMaximumAmount(amountInPot);
+            mainPot.setMaximumAmount(this.amountInPot);
             mainPot.AddPlayer(this);
             mainPot.MinimumRaise = raise;
-            Message = "Call " + (amount - raise).ToString("c0") + " and raise " + raise.ToString("c0");
-            SimplifiedMessage = "RAISE " + (amount - raise);
+            this.Message = "Call " + (amount - raise).ToString("c0") + " and raise " + raise.ToString("c0");
+            this.SimplifiedMessage = "RAISE " + (amount - raise);
             mainPot.AgressorIndex = index;
         }
         //bet a certain amount of money
         public void Bet(int bet, Pot mainPot)
         {
-            if (ChipStack <= bet)
+            if (this.ChipStack <= bet)
             {
-                AllIn(mainPot);
+                this.AllIn(mainPot);
                 return;
             }
-            ChipStack -= bet;
-            amountInPot += bet;
+            this.ChipStack -= bet;
+            this.amountInPot += bet;
             mainPot.Add(bet);
-            mainPot.setMaximumAmount(amountInPot);
+            mainPot.setMaximumAmount(this.amountInPot);
             mainPot.MinimumRaise = bet;
-            Message = "Bet " + bet.ToString("c0");
-            SimplifiedMessage = "BET " + bet;
+            this.Message = "Bet " + bet.ToString("c0");
+            this.SimplifiedMessage = "BET " + bet;
         }
         public void Bet(int bet, Pot mainPot, int index)
         {
-            if (ChipStack <= bet)
+            if (this.ChipStack <= bet)
             {
-                AllIn(mainPot,index);
+                this.AllIn(mainPot,index);
                 return;
             }
-            ChipStack -= bet;
-            amountInPot += bet;
+            this.ChipStack -= bet;
+            this.amountInPot += bet;
             mainPot.Add(bet);
-            mainPot.setMaximumAmount(amountInPot);
+            mainPot.setMaximumAmount(this.amountInPot);
             mainPot.MinimumRaise = bet;
-            Message = "Bet " + bet.ToString("c0");
-            SimplifiedMessage = "BET " + bet;
+            this.Message = "Bet " + bet.ToString("c0");
+            this.SimplifiedMessage = "BET " + bet;
             mainPot.AgressorIndex = index;
         }
         //all in, bet remaining chipstack
         public void AllIn(Pot mainPot)
         {
-            AmountContributed = ChipStack;
+            this.AmountContributed = this.ChipStack;
             if (mainPot.MinimumAllInAmount == 0)
             {
                 mainPot.AmountInPotBeforeAllIn = mainPot.Amount;
-                mainPot.MinimumAllInAmount = ChipStack;
+                mainPot.MinimumAllInAmount = this.ChipStack;
             }
-            else if (chipStack < mainPot.MinimumAllInAmount)
+            else if (this.chipStack < mainPot.MinimumAllInAmount)
             {
-                mainPot.MinimumAllInAmount = ChipStack;
+                mainPot.MinimumAllInAmount = this.ChipStack;
             }
-            if (ChipStack > mainPot.MinimumRaise)
-                mainPot.MinimumRaise = ChipStack;
+            if (this.ChipStack > mainPot.MinimumRaise)
+                mainPot.MinimumRaise = this.ChipStack;
             mainPot.AddPlayer(this);
-            mainPot.Add(ChipStack);
-            amountInPot += ChipStack;
-            ChipStack = 0;
-            if (amountInPot > mainPot.getMaximumAmountPutIn())
-                mainPot.setMaximumAmount(amountInPot);
-            Message = "I'm All-In";
-            SimplifiedMessage = "ALL IN";
+            mainPot.Add(this.ChipStack);
+            this.amountInPot += this.ChipStack;
+            this.ChipStack = 0;
+            if (this.amountInPot > mainPot.getMaximumAmountPutIn())
+                mainPot.setMaximumAmount(this.amountInPot);
+            this.Message = "I'm All-In";
+            this.SimplifiedMessage = "ALL IN";
         }
         public void AllIn(Pot mainPot,int index)
         {
-            AmountContributed = ChipStack;
+            this.AmountContributed = this.ChipStack;
             if (mainPot.MinimumAllInAmount == 0)
             {
                 mainPot.AmountInPotBeforeAllIn = mainPot.Amount;
-                mainPot.MinimumAllInAmount = ChipStack;
+                mainPot.MinimumAllInAmount = this.ChipStack;
             }
-            else if (chipStack < mainPot.MinimumAllInAmount)
+            else if (this.chipStack < mainPot.MinimumAllInAmount)
             {
-                mainPot.MinimumAllInAmount = ChipStack;
+                mainPot.MinimumAllInAmount = this.ChipStack;
             }
-            if (ChipStack > mainPot.MinimumRaise)
-                mainPot.MinimumRaise = ChipStack;
+            if (this.ChipStack > mainPot.MinimumRaise)
+                mainPot.MinimumRaise = this.ChipStack;
             mainPot.AddPlayer(this);
-            mainPot.Add(ChipStack);
-            amountInPot += ChipStack;
-            ChipStack = 0;
-            if(amountInPot>mainPot.getMaximumAmountPutIn())
-                mainPot.setMaximumAmount(amountInPot);
-            Message = "I'm All-In";
-            SimplifiedMessage = "ALL IN";
+            mainPot.Add(this.ChipStack);
+            this.amountInPot += this.ChipStack;
+            this.ChipStack = 0;
+            if(this.amountInPot>mainPot.getMaximumAmountPutIn())
+                mainPot.setMaximumAmount(this.amountInPot);
+            this.Message = "I'm All-In";
+            this.SimplifiedMessage = "ALL IN";
             mainPot.AgressorIndex = index;
         }
         //reset the individual players
@@ -371,7 +369,7 @@ namespace Holdem
         {
             this.amountInPot = 0;
             this.folded = false;
-            InitialStack = ChipStack;
+            this.InitialStack = this.ChipStack;
             this.myHand.Clear();
             this.Message = "";
             this.SimplifiedMessage = "";
@@ -388,7 +386,7 @@ namespace Holdem
             if (this.ChipStack != 0)
                 throw new InvalidOperationException();
             this.Message = this.Name + " busted out!";
-            isbusted = true;
+            this.isbusted = true;
         }
         
     }

@@ -1,13 +1,11 @@
-﻿namespace Holdem
+﻿namespace TexasHoldem.AI.SmokinAcesPlayer
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using TexasHoldem.AI.SmokinAcesPlayer;
     using TexasHoldem.Logic.Cards;
     using TexasHoldem.Logic.Extensions;
-    using TexasHoldem.Logic.Players;
 
     /// <summary>
     ///     class that support AI thinking for the easy, medium and hard level
