@@ -62,12 +62,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameSimulators\AlwaysCallPlayersGameSimulation.cs" />
+    <Compile Include="GameSimulators\SmokinAcesVsAlwaysCall.cs" />
     <Compile Include="GameSimulators\BaseGameSimulator.cs" />
     <Compile Include="GameSimulators\GameSimulationResult.cs" />
     <Compile Include="GameSimulators\IGameSimulator.cs" />
     <Compile Include="GameSimulators\SmartVsAlwaysCallPlayerSimulation.cs" />
-    <Compile Include="GameSimulators\SmartVsDummyPlayerSimulator.cs" />
-    <Compile Include="GameSimulators\SmartVsSmartPlayerSimulator.cs" />
+    <Compile Include="GameSimulators\SmokinAcesVsDummyPlayerSimulator.cs" />
+    <Compile Include="GameSimulators\SmokinAcesVsSmokinAcesSimulator.cs" />
+    <Compile Include="GameSimulators\SmokinAcesVsSmart.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -83,6 +85,10 @@
     <ProjectReference Include="..\..\AI\TexasHoldem.AI.SmartPlayer\TexasHoldem.AI.SmartPlayer.csproj">
       <Project>{E7BA8017-D56E-485C-81D1-A1CCDAAE624F}</Project>
       <Name>TexasHoldem.AI.SmartPlayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\AI\TexasHoldem.AI.SmokinAcesPlayer\TexasHoldem.AI.SmokinAcesPlayer.csproj">
+      <Project>{e24be8b9-38b5-4673-a0c4-e6b64fa6692f}</Project>
+      <Name>TexasHoldem.AI.SmokinAcesPlayer</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\TexasHoldem.Logic\TexasHoldem.Logic.csproj">
       <Project>{BCF99E8B-2025-444F-83C7-24542FCF33DF}</Project>

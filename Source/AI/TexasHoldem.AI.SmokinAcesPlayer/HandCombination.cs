@@ -52,7 +52,6 @@
 
         private static bool IsStraightFlush(List<Card> sortedHand)
         {
-
             for (var i = 0; i < sortedHand.Count - 4; i++)
             {
                 if ((int) sortedHand[i].Type == (int) sortedHand[i + 1].Type - 1 &&
