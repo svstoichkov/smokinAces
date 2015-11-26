@@ -18,20 +18,25 @@
             var myHand = new List<Card> { this.FirstCard, this.SecondCard };
             var communityCards = new List<Card>(this.CommunityCards);
 
-            var handValue = Ai.CalculateHandValue(myHand, communityCards);
-            var raiseAmount = (int) (handValue * 70) / (4 - (int) context.RoundType);
+            var handValue = HandEvaluator.CalculateHandValue(myHand, communityCards);
+            var raiseAmount = (int)(handValue * 70) / (4 - (int)context.RoundType);
 
-            if (context.MoneyLeft < 100 && !context.IsAllIn && (int)context.RoundType > 0)
+            if (context.MoneyLeft == 0)
             {
-                if (handValue < 0.20)
+                return PlayerAction.CheckOrCall();
+            }
+
+            if (context.MoneyLeft < 100)
+            {
+                if (raiseAmount > 2)
                 {
-                    return PlayerAction.Fold();
+                    raiseAmount /= 2;
                 }
             }
 
-            if (handValue < 0.15)
+            if (handValue < 0.20)
             {
-                if (context.MoneyToCall != 0)
+                if (context.MoneyToCall > raiseAmount + 1)
                 {
                     return PlayerAction.Fold();
                 }
@@ -39,34 +44,39 @@
                 return PlayerAction.CheckOrCall();
             }
 
-            if (handValue < 0.25)
+            if (handValue < 0.30)
             {
-                if (context.MoneyToCall <= raiseAmount / 3)
+                if (context.MoneyToCall > raiseAmount / 2)
                 {
-                    return PlayerAction.CheckOrCall();
+                    return PlayerAction.Fold();
                 }
 
-                return PlayerAction.Fold();
+                return PlayerAction.CheckOrCall();
             }
 
-            if (handValue < 0.35)
+            if (handValue < 0.40)
             {
-                if (context.MoneyToCall <= raiseAmount * 2 / 3)
+                if (context.MoneyToCall > raiseAmount)
                 {
-                    return PlayerAction.CheckOrCall();
+                    return PlayerAction.Fold();
                 }
 
-                return PlayerAction.Fold();
+                return PlayerAction.CheckOrCall();
             }
 
-            if (handValue > 0.70)
+            if (handValue > 0.80)
             {
-                return PlayerAction.Raise(context.MoneyLeft + 100);
+                return PlayerAction.Raise(context.MoneyLeft);
             }
 
-            if (handValue > 0.55)
+            if (handValue > 0.60)
             {
                 return PlayerAction.Raise(raiseAmount * 3);
+            }
+
+            if (context.MyMoneyInTheRound > raiseAmount * 3)
+            {
+                return PlayerAction.CheckOrCall();
             }
 
             return PlayerAction.Raise(raiseAmount);

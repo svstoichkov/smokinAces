@@ -2,6 +2,8 @@
 {
     using System;
 
+    using AI.SmokinAcesPlayer;
+
     using TexasHoldem.AI.SmartPlayer;
     using TexasHoldem.Logic.GameMechanics;
 
@@ -20,8 +22,9 @@
 
             ConsoleHelper.WriteOnConsole(GameHeight - 1, GameWidth - ProgramName.Length - 1, ProgramName, ConsoleColor.Green);
 
-            var consolePlayer1 = new ConsoleUiDecorator(new ConsolePlayer(0), 0, GameWidth, 5);
-            var consolePlayer2 = new ConsoleUiDecorator(new SmartPlayer(), 6, GameWidth, 5);
+            //var consolePlayer1 = new ConsoleUiDecorator(new ConsolePlayer(0), 0, GameWidth, 5);
+            var consolePlayer1 = new ConsoleUiDecorator(new SmartPlayer(), 0, GameWidth, 5);
+            var consolePlayer2 = new ConsoleUiDecorator(new SmokinAcesPlayer(), 6, GameWidth, 5);
             ITexasHoldemGame game = new TwoPlayersTexasHoldemGame(consolePlayer1, consolePlayer2);
             game.Start();
         }

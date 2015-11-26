@@ -7,12 +7,21 @@
     using TexasHoldem.Logic.Cards;
     using TexasHoldem.Logic.Extensions;
     
-    public class Ai
+    public class HandEvaluator
     {
         public static double CalculateHandValue(List<Card> myHand, List<Card> communityCards)
         {
+            if (communityCards.Count == 0)
+            {
+                if ((int) myHand[0].Type < 5 && (int) myHand[1].Type < 5 && myHand[0].Type != myHand[1].Type)
+                {
+                    return 0;
+                }
+            }
+            var locker = new object();
             double wins = 0;
             Parallel.For(0, Settings.GameSimulationsCount, i =>
+            //for (int i = 0; i < Settings.GameSimulationsCount; i++)
             {
                 var player1Hand = new List<Card>(myHand);
                 var player2Hand = new List<Card>();
@@ -46,7 +55,10 @@
 
                 if (player1HandResult > player2HandResult)
                 {
-                    wins++;
+                    lock (locker)
+                    {
+                        wins++;
+                    }
                 }
             });
 
