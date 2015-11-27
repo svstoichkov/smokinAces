@@ -13,7 +13,7 @@
             return card;
         }
 
-        public static void CustomRemoveRange(this List<Card> deck, List<Card> cardsToRemove)
+        public static void CustomRemoveRange(this IList<Card> deck, IList<Card> cardsToRemove)
         {
             foreach (var card in cardsToRemove)
             {

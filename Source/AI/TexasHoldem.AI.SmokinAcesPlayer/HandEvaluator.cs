@@ -4,12 +4,16 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Logic.Helpers;
+
     using TexasHoldem.Logic.Cards;
     using TexasHoldem.Logic.Extensions;
     
-    public class HandEvaluator
+    public static class HandEvaluator
     {
-        public static double CalculateHandValue(List<Card> myHand, List<Card> communityCards)
+        private static readonly object locker = new object();
+
+        public static double CalculateHandValue(IList<Card> myHand, IList<Card> communityCards)
         {
             if (communityCards.Count == 0)
             {
@@ -18,8 +22,9 @@
                     return 0;
                 }
             }
-            var locker = new object();
+            
             double wins = 0;
+
             Parallel.For(0, Settings.GameSimulationsCount, i =>
             //for (int i = 0; i < Settings.GameSimulationsCount; i++)
             {
@@ -50,10 +55,7 @@
                 player2Hand.AddRange(remainingCommunityCards);
                 
                 //compare hands
-                var player1HandResult = HandCombination.GetBestHand(player1Hand);
-                var player2HandResult = HandCombination.GetBestHand(player2Hand);
-
-                if (player1HandResult > player2HandResult)
+                if (Helpers.CompareCards(player1Hand, player2Hand) == 1)
                 {
                     lock (locker)
                     {

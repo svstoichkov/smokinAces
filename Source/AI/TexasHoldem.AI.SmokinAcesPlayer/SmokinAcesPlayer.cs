@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Logic;
     using Logic.Cards;
@@ -9,17 +10,17 @@
 
     public class SmokinAcesPlayer : BasePlayer
     {
-        private Random rand = new Random();
-
         public override string Name { get; } = "SmokinAcesPlayer_" + Guid.NewGuid();
 
         public override PlayerAction GetTurn(GetTurnContext context)
         {
-            var myHand = new List<Card> { this.FirstCard, this.SecondCard };
-            var communityCards = new List<Card>(this.CommunityCards);
-
-            var handValue = HandEvaluator.CalculateHandValue(myHand, communityCards);
+            var handValue = HandEvaluator.CalculateHandValue(new List<Card> { this.FirstCard, this.SecondCard }, this.CommunityCards.ToList());
             var raiseAmount = (int)(handValue * 70) / (4 - (int)context.RoundType);
+
+            if (context.RoundType == GameRoundType.PreFlop)
+            {
+                handValue -= 0.10;
+            }
 
             if (context.MoneyLeft == 0)
             {
@@ -64,9 +65,9 @@
                 return PlayerAction.CheckOrCall();
             }
 
-            if (handValue > 0.80)
+            if (handValue > 0.85)
             {
-                return PlayerAction.Raise(context.MoneyLeft);
+                return PlayerAction.Raise(context.MoneyLeft + 100);
             }
 
             if (handValue > 0.60)
