@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using ChainOfResponsibility;
+
     using Logic;
     using Logic.Cards;
     using Logic.Players;
@@ -12,21 +14,30 @@
     {
         public override string Name { get; } = "SmokinAcesPlayer_" + Guid.NewGuid();
 
+        public static double handValue;
+        public static int raiseAmount;
+        public static HashSet<PlayerActionAndName> actions = new HashSet<PlayerActionAndName>();
+
         public override PlayerAction GetTurn(GetTurnContext context)
         {
-            var handValue = HandEvaluator.CalculateHandValue(new List<Card> { this.FirstCard, this.SecondCard }, this.CommunityCards.ToList());
-            var raiseAmount = (int)(handValue * 70) / (4 - (int)context.RoundType);
+            foreach (var action in context.PreviousRoundActions.Where(x => !x.PlayerName.Contains("SmokinAces") && x.Action != PlayerAction.CheckOrCall()))
+            {
+                actions.Add(action);
+            }
+
+            handValue = HandEvaluator.CalculateHandValue(new List<Card> { this.FirstCard, this.SecondCard }, this.CommunityCards.ToList());
+            raiseAmount = (int)(handValue * 70) / (4 - (int)context.RoundType);
 
             if (context.RoundType == GameRoundType.PreFlop)
             {
                 handValue -= 0.10;
             }
-
-            if (context.MoneyLeft == 0)
+            
+            if (context.MoneyLeft <= 0)
             {
                 return PlayerAction.CheckOrCall();
             }
-
+            
             if (context.MoneyLeft < 100)
             {
                 if (raiseAmount > 2)
@@ -35,52 +46,27 @@
                 }
             }
 
-            if (handValue < 0.20)
-            {
-                if (context.MoneyToCall > raiseAmount + 1)
-                {
-                    return PlayerAction.Fold();
-                }
+            var bluffer = new Bluffer();
+            var lessThan50 = new LessThan50();
+            var lessThan60 = new LessThan60();
+            var lessThan70 = new LessThan70();
+            var lessThan80 = new LessThan80();
+            var lessThan90 = new LessThan90();
+            var lessThan100 = new LessThan100();
 
-                return PlayerAction.CheckOrCall();
-            }
+            bluffer.SetSuccessor(lessThan50);
+            lessThan50.SetSuccessor(lessThan60);
+            lessThan60.SetSuccessor(lessThan70);
+            lessThan70.SetSuccessor(lessThan80);
+            lessThan80.SetSuccessor(lessThan90);
+            lessThan90.SetSuccessor(lessThan100);
 
-            if (handValue < 0.30)
-            {
-                if (context.MoneyToCall > raiseAmount / 2)
-                {
-                    return PlayerAction.Fold();
-                }
+            return bluffer.ProcessRequest(context, handValue, raiseAmount);
+        }
 
-                return PlayerAction.CheckOrCall();
-            }
-
-            if (handValue < 0.40)
-            {
-                if (context.MoneyToCall > raiseAmount)
-                {
-                    return PlayerAction.Fold();
-                }
-
-                return PlayerAction.CheckOrCall();
-            }
-
-            if (handValue > 0.85)
-            {
-                return PlayerAction.Raise(context.MoneyLeft + 100);
-            }
-
-            if (handValue > 0.60)
-            {
-                return PlayerAction.Raise(raiseAmount * 3);
-            }
-
-            if (context.MyMoneyInTheRound > raiseAmount * 3)
-            {
-                return PlayerAction.CheckOrCall();
-            }
-
-            return PlayerAction.Raise(raiseAmount);
+        public override void EndHand(EndHandContext context)
+        {
+            actions.Clear();
         }
     }
 }

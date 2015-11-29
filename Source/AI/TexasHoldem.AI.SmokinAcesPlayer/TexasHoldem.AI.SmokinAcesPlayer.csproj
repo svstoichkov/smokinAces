@@ -40,6 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChainOfResponsibility\Bluffer.cs" />
+    <Compile Include="ChainOfResponsibility\DecisionTaker.cs" />
+    <Compile Include="ChainOfResponsibility\LessThan100.cs" />
+    <Compile Include="ChainOfResponsibility\LessThan50.cs" />
+    <Compile Include="ChainOfResponsibility\LessThan60.cs" />
+    <Compile Include="ChainOfResponsibility\LessThan70.cs" />
+    <Compile Include="ChainOfResponsibility\LessThan80.cs" />
+    <Compile Include="ChainOfResponsibility\LessThan90.cs" />
     <Compile Include="HandEvaluator.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Settings.cs" />
