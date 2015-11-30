@@ -13,8 +13,7 @@
             if (handValue < 0.60)
             {
                 if (context.MoneyToCall - context.MyMoneyInTheRound > raiseAmount * 2 && SmokinAcesPlayer.actions
-                    .Any(x => !x.PlayerName.ToLower().Contains("bullet") &&
-                    !x.PlayerName.ToLower().Contains("dadummest") && !x.PlayerName.ToLower().Contains("smart")))
+                    .Any(x => !x.PlayerName.ToLower().Contains("dadummest")))
                 {
                     return PlayerAction.Fold();
                 }

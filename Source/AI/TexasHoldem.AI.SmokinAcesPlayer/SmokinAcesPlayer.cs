@@ -26,7 +26,7 @@
             }
 
             handValue = HandEvaluator.CalculateHandValue(new List<Card> { this.FirstCard, this.SecondCard }, this.CommunityCards.ToList());
-            raiseAmount = (int)(handValue * 70) / (5 - (int)context.RoundType);
+            raiseAmount = (int)(handValue * 70) / (5 - (int)context.RoundType) + context.SmallBlind;
 
             if (context.RoundType == GameRoundType.PreFlop)
             {
