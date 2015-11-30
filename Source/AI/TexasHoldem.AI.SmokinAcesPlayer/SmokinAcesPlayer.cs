@@ -26,7 +26,7 @@
             }
 
             handValue = HandEvaluator.CalculateHandValue(new List<Card> { this.FirstCard, this.SecondCard }, this.CommunityCards.ToList());
-            raiseAmount = (int)(handValue * 70) / (4 - (int)context.RoundType);
+            raiseAmount = (int)(handValue * 70) / (5 - (int)context.RoundType);
 
             if (context.RoundType == GameRoundType.PreFlop)
             {
@@ -70,3 +70,12 @@
         }
     }
 }
+
+// Bluffasaurus -> SmartPlayer
+// Bullets -> BulletsPlayer
+// ColdCall -> TodorAllIn
+// hashTagNimoa -> DaDummestPlayerEver
+// qAliRaza -> SmartPlayer
+// Sparta - SpartaPlayer
+// ThreeOfAKind -> 3OfAKind
+// Turing -> TuringPlayer

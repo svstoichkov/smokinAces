@@ -1,5 +1,6 @@
 ﻿namespace TexasHoldem.AI.SmokinAcesPlayer.ChainOfResponsibility
 {
+    using Logic;
     using Logic.Players;
 
     public class Bluffer : DecisionTaker
