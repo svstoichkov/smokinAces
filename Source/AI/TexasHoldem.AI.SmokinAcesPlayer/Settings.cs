@@ -2,6 +2,6 @@
 {
     public static class Settings
     {
-       public const int GameSimulationsCount = 100;
+       public const int GameSimulationsCount = 500;
     }
 }

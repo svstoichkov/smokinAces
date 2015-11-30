@@ -19,7 +19,7 @@
                 }
 
                 var raiseCount = SmokinAcesPlayer.actions.Count;
-                if (raiseCount <= 2 && context.RoundType > GameRoundType.PreFlop)
+                if (raiseCount <= 2 && context.RoundType > GameRoundType.Turn)
                 {
                     return PlayerAction.Raise(raiseAmount * 2);
                 }
