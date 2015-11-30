@@ -4,6 +4,8 @@
 
     using Logic.Players;
 
+    using TexasHoldem.Logic;
+
     internal class LessThan80 : DecisionTaker
     {
         public override PlayerAction ProcessRequest(GetTurnContext context, double handValue, int raiseAmount)
@@ -17,7 +19,7 @@
                 }
 
                 var raiseCount = SmokinAcesPlayer.actions.Count;
-                if (raiseCount <= 2)
+                if (raiseCount <= 2 && context.RoundType > GameRoundType.PreFlop)
                 {
                     return PlayerAction.Raise(raiseAmount * 2);
                 }

@@ -8,7 +8,7 @@
         {
             if (handValue < 0.50)
             {
-                if (context.MoneyToCall > raiseAmount / 1.5)
+                if (context.MoneyToCall > raiseAmount)
                 {
                     return PlayerAction.Fold();
                 }
