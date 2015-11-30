@@ -1,15 +1,12 @@
 ﻿namespace TexasHoldem.Tests.GameSimulations.GameSimulators
 {
-    using AI.SmokinAcesPlayer;
+    using TexasHoldem.AI.SmartPlayer;
+    using TexasHoldem.Logic.Players;
 
-    using Bullets.Logic;
-
-    using Logic.Players;
-
-    public class SmokinAcesVsBullet : BaseGameSimulator
+    public class SmartVsSmartPlayerSimulator : BaseGameSimulator
     {
-        private readonly IPlayer firstPlayer = new SmokinAcesPlayer();
-        private readonly IPlayer secondPlayer = new BulletsPlayer();
+        private readonly IPlayer firstPlayer = new SmartPlayer();
+        private readonly IPlayer secondPlayer = new SmartPlayer();
 
         protected override IPlayer GetFirstPlayer()
         {

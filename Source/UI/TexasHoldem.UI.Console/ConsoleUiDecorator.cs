@@ -3,8 +3,6 @@
     using System;
     using System.Collections.Generic;
 
-    using AI.SmokinAcesPlayer;
-
     using TexasHoldem.Logic.Cards;
     using TexasHoldem.Logic.Extensions;
     using TexasHoldem.Logic.Players;
@@ -40,7 +38,6 @@
             ConsoleHelper.WriteOnConsole(this.row + 3, 2, "                            ");
 
             ConsoleHelper.WriteOnConsole(this.row + 1, 2, context.MoneyLeft.ToString());
-
             this.DrawSingleCard(this.row + 1, 10, context.FirstCard);
             this.DrawSingleCard(this.row + 1, 14, context.SecondCard);
 
@@ -70,15 +67,12 @@
                 : "(" + (action.Money + ((context.MoneyToCall < 0) ? 0 : context.MoneyToCall) + ")"));
 
             ConsoleHelper.WriteOnConsole(this.row + 3, 2, "Last action: " + lastAction + "            ");
-            ConsoleHelper.WriteOnConsole(this.row + 4, 2, "HandValue: " + SmokinAcesPlayer.handValue + "            ");
-            ConsoleHelper.WriteOnConsole(this.row + 5, 2, "RaiseAmount: " + SmokinAcesPlayer.raiseAmount + "            ");
 
             var moneyAfterAction = action.Type == PlayerActionType.Fold
                 ? context.MoneyLeft
                 : context.MoneyLeft - action.Money - context.MoneyToCall;
 
             ConsoleHelper.WriteOnConsole(this.row + 1, 2, moneyAfterAction + "   ");
-            Console.ReadKey();
 
             return action;
         }
